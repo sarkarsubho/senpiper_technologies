@@ -58,11 +58,16 @@ const columns = [
 const Details = () => {
   const [rows, setRows] = useState([]);
   useEffect(() => {
-    let data = getLocalStorage().map((e) => ({
-      ...e,
-      phone: `${e.phone.country} ${e.phone.number}`,
-    }));
-    setRows(data);
+    let data = getLocalStorage() || [];
+
+    setRows(
+      data.map((e) => {
+        return {
+          ...e,
+          phone: `${e.phone.country} ${e.phone.number}`,
+        };
+      })
+    );
   }, []);
   return (
     <Table heading={"Review Details"} columns={columns} rows={rows}></Table>
