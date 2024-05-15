@@ -14,7 +14,12 @@ const countries = [
   // Add more countries as needed with their respective regex patterns
 ];
 
-const MobileNumberInput = ({ numberState, setNumberState, error }) => {
+const MobileNumberInput = ({
+  numberState,
+  setNumberState,
+  error,
+  setErrors
+}) => {
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [mobileNumber, setMobileNumber] = useState(numberState.number);
 
@@ -24,9 +29,12 @@ const MobileNumberInput = ({ numberState, setNumberState, error }) => {
     setSelectedCountry(selected);
   };
 
+  console.log("error", numberState.error, error);
+
   const handleMobileNumberChange = (e) => {
     const number = e.target.value;
     setMobileNumber(number);
+    setErrors((prev) => ({ ...prev, phone: false }));
     if (!selectedCountry.pattern.test(number)) {
       setNumberState({ ...numberState, error: true });
     } else {
@@ -38,10 +46,6 @@ const MobileNumberInput = ({ numberState, setNumberState, error }) => {
       });
     }
   };
-
-  useEffect(() => {
-    setMobileNumber("");
-  }, [numberState.number]);
 
   return (
     <Stack
@@ -83,7 +87,6 @@ const MobileNumberInput = ({ numberState, setNumberState, error }) => {
 
       <TextField
         id="mobileNumber"
-        // label="Mobile Number"
         sx={{
           flexGrow: 1,
         }}
@@ -92,7 +95,6 @@ const MobileNumberInput = ({ numberState, setNumberState, error }) => {
         value={mobileNumber}
         onChange={handleMobileNumberChange}
         error={Boolean(numberState.error)}
-        // helperText={errorMessage}
       />
 
       {/* Error message modal */}

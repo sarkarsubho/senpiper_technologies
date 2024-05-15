@@ -12,7 +12,6 @@ import Options from "../components/shared/Options";
 import { ErrorOutlineOutlined } from "@mui/icons-material";
 import { setLocalStorage } from "../utils/localstorage";
 import Thankyou from "./Thankyou";
-// import MaterialUIForm from "./Temp";
 
 const Home = () => {
   const [numberState, setNumberState] = useState({
@@ -46,6 +45,11 @@ const Home = () => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
+  const validateName = (name) => {
+    // validation regex for checking number
+
+    return /\d/.test(name);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,8 +74,17 @@ const Home = () => {
       }
     });
 
+    if (numberState.number === "") {
+      newErrors["phone"] = true;
+      errorsFound = true;
+    }
+
     if (!validateEmail(formData.email)) {
       newErrors["email"] = true;
+      errorsFound = true;
+    }
+    if (validateName(formData.name)) {
+      newErrors["name"] = true;
       errorsFound = true;
     }
 
@@ -150,7 +163,7 @@ const Home = () => {
               // sx={{
               //   maxWidth: "50%",
               // }}
-              autoComplete="email"
+              autoComplete="name"
               autoFocus
               value={formData.name}
               onChange={handleInputChange}
@@ -173,7 +186,7 @@ const Home = () => {
               >
                 <ErrorOutlineOutlined />{" "}
                 <Typography color={"error"} textAlign={"center"}>
-                  please Enter your number.
+                  please Enter a valid name.
                 </Typography>
               </Stack>
             )}
@@ -237,6 +250,7 @@ const Home = () => {
             numberState={numberState}
             setNumberState={setNumberState}
             error={errors.phone}
+            setErrors={setErrors}
           ></MobileNumberInput>
         </Box>
 
